@@ -61,7 +61,7 @@ print(resultado)  # Salida: None
 
 ## Las funciones son adeacuadas para:
 
-1.  operaciones repetitivas
+### 1. operaciones repetitivas
 
 **Ejemplo:**
 
@@ -77,7 +77,7 @@ print(calcular_iva(precio_producto1)) #✅ 190.0
 print(calcular_iva(precio_producto2)) #✅ 380.0
 ```
 
-2. Para organizar el código por funcionalidad
+### 2. Para organizar el código por funcionalidad
 
 **Ejemplo:**
 
@@ -119,6 +119,76 @@ login() #✅
 # Ingrese su contraseña: 123
 # Usuario o contraseña incorrecta
 
+```
 
-<hr>
+### 3. Para abstraer operaciones complejas
+
+**Ejemplo:**
+
+```python
+
+# Función sencilla para calcular la distancia entre dos puntos
+def calcular_distancia(punto1, punto2):
+    # Extraemos las coordenadas de cada punto
+    x1, y1 = punto1
+    x2, y2 = punto2
+
+    # Calculamos la diferencia en cada eje
+    diferencia_x = x2 - x1
+    diferencia_y = y2 - y1
+
+    # Usamos la fórmula de la distancia euclidiana
+    distancia = (diferencia_x**2 + diferencia_y**2) ** 0.5
+    return distancia
+
+# Ejemplo 1:
+punto_a = (2, 3)
+punto_b = (5, 5)
+print("Ejemplo 1 - Distancia entre", punto_a, "y", punto_b, "es:", calcular_distancia(punto_a, punto_b))
+# Resultado: 3.605551275463989
+
+print("===========================")
+
+# Ejemplo 2:
+punto_c = (3, 4)
+punto_d = (6, 8)
+print("Ejemplo 2 - Distancia entre", punto_c, "y", punto_d, "es:", calcular_distancia(punto_c, punto_d))
+
+```
+
+### 4. Para crear operaciones con efectos secundarios controlados
+
+**Ejemplos:**
+
+```python
+usuarios = []
+
+def agregar_usuario(nombre, edad):
+    usuarios.append({"nombre": nombre, "edad": edad})
+    return usuarios
+
+def listar_usuarios():
+
+    if not usuarios:
+        return "No hay usuarios registrados"
+
+    print("Lista de usuarios")
+    for usuario in usuarios:
+        print(f"Nombre: {usuario['nombre']}, Edad: {usuario['edad']}")
+
+
+agregar_usuario("Jhordan", 25)
+agregar_usuario("Andres", 30)
+listar_usuarios()
+# Lista de usuarios
+# Nombre: Jhordan, Edad: 25
+# Nombre: Andres, Edad: 30
+print("===========================")
+agregar_usuario("Salome", 20)
+listar_usuarios()
+# Lista de usuarios
+# Nombre: Jhordan, Edad: 25
+# Nombre: Andres, Edad: 30
+# Nombre: Salome, Edad: 20
+print("===========================")
 ```
