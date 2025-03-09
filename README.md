@@ -192,3 +192,12 @@ listar_usuarios()
 # Nombre: Salome, Edad: 20
 print("===========================")
 ```
+
+# Conclusión
+
+- Cada función dberia hacer una sola cosa y hacerla bien.
+- Usar nombres que describan lo que hace la función.
+- Incluya como parametros solo los que necesite trabajar.
+- Las funciones deberia ser relativamente pqueñas (10-20 lineas de codigo).
+- Documentar las funciones para que se explique el proposito, parámetros y valores de retorno
+- Manejar bien los errores
