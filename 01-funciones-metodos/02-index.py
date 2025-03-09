@@ -27,12 +27,12 @@ def calcular_area(base, altura):
     return (base * altura) / 2
 
 print("1. Función salidar")
-print(saludar())
+print(saludar()) # ✅ Hola, soy una función
 print("===========================")
 print("2. Función saludar_persona")
-print(saludar_persona())
-print(saludar_persona("Salome"))
+print(saludar_persona()) #✅ Hola, Jhordan  - por defecto
+print(saludar_persona("Salome")) #✅ Hola, Salome
 print("===========================")
 print("3.Función para calcular el área de un triángulo")
-print(calcular_area(10, 5))
+print(calcular_area(10, 5)) #✅ 25.0
 print("===========================")
