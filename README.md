@@ -58,3 +58,67 @@ print(resultado)  # Salida: None
 ```
 
 <hr>
+
+## Las funciones son adeacuadas para:
+
+1.  operaciones repetitivas
+
+**Ejemplo:**
+
+```python
+def calcular_iva(monto):
+    return monto * 0.19
+
+precio_producto1= 1000
+precio_producto2= 2000
+
+print("1. Calcular IVA")
+print(calcular_iva(precio_producto1)) #✅ 190.0
+print(calcular_iva(precio_producto2)) #✅ 380.0
+```
+
+2. Para organizar el código por funcionalidad
+
+**Ejemplo:**
+
+```python
+def validar_usuario(name, password):
+    if name == 'admin' and password == 'admin':
+        return True
+    return False
+
+def mostrar_bienvenida(nombre):
+    print(f"Bienvenido {nombre}")
+
+
+def mostrar_error():
+    print("Usuario o contraseña incorrecta")
+
+def login():
+    nombre = input("Ingrese su nombre: ")
+    password = input("Ingrese su contraseña: ")
+
+    if validar_usuario(nombre, password):
+        mostrar_bienvenida(nombre)
+    else:
+        mostrar_error()
+
+login() #✅
+# Ingrese su nombre: admin
+# Ingrese su contraseña: admin
+# Bienvenido admin
+
+# login() #✅
+# Ingrese su nombre: admin
+# Ingrese su contraseña: admin
+# Bienvenido admin
+
+
+# login() #❌
+# Ingrese su nombre: jhordan
+# Ingrese su contraseña: 123
+# Usuario o contraseña incorrecta
+
+
+<hr>
+```
