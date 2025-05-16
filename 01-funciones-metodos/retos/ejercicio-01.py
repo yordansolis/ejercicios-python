@@ -1,6 +1,7 @@
 """
 Calcular un Descuento
-Crea una función que calcule el precio final después de aplicar un descuento. La función debe recibir el precio original y el porcentaje de descuento
+Crea una función que calcule el precio final después de aplicar un descuento. 
+La función debe recibir el precio original y el porcentaje de descuento
 """
 
 
