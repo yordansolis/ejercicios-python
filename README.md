@@ -1,21 +1,21 @@
 # Ejercicios-python
 
-Ejercicios y logica de programación
+Ejercicios y lógica de programación
 
-# 1. Retos de funciones y metodos
+# 1. Retos de funciones y métodos
 
-Las funciones son bloques de código reotilizables que realizan una tera específica. Son fundamentables en programación porque permiten dividir problemas complejos en partes más pequeñas y manejables.
+Las funciones son bloques de código reutilizables que realizan una tarea específica. Son fundamentales en programación porque permiten dividir problemas complejos en partes más pequeñas y manejables.
 
-## Que es una función ?
+## ¿Qué es una función?
 
 Una función es un bloque de código con un nombre que puede ser "llamado" (ejecutado) en diferentes partes de un programa.
 
-## Porque utilizarlas ?
+## ¿Por qué utilizarlas?
 
-- Reutulización de codigo.
-- Modelaridad.
+- Reutilización de código.
+- Modularidad.
 - Mantenibilidad.
-- Legilibilidad.
+- Legibilidad.
 
 Ejemplo:
 01-funciones-metodos
@@ -59,9 +59,9 @@ print(resultado)  # Salida: None
 
 <hr>
 
-## Las funciones son adeacuadas para:
+## Las funciones son adecuadas para:
 
-### 1. operaciones repetitivas
+### 1. Operaciones repetitivas
 
 **Ejemplo:**
 
@@ -195,9 +195,135 @@ print("===========================")
 
 # Conclusión
 
-- Cada función dberia hacer una sola cosa y hacerla bien.
+- Cada función debería hacer una sola cosa y hacerla bien.
 - Usar nombres que describan lo que hace la función.
-- Incluya como parametros solo los que necesite trabajar.
-- Las funciones deberia ser relativamente pqueñas (10-20 lineas de codigo).
-- Documentar las funciones para que se explique el proposito, parámetros y valores de retorno
-- Manejar bien los errores
+- Incluya como parámetros solo los que necesite trabajar.
+- Las funciones deberían ser relativamente pequeñas (10-20 líneas de código).
+- Documentar las funciones para que se explique el propósito, parámetros y valores de retorno.
+- Manejar bien los errores.
+
+---
+
+## Concurrencia y async / await
+
+### ¿Cuándo usar async/await?
+
+✅ Usa `async def` cuando:
+
+- Haces llamadas a bases de datos con drivers asíncronos (asyncpg, motor, databases)
+- Llamas APIs externas con httpx.AsyncClient o aiohttp
+- Usas librerías async como aiofiles, redis.asyncio
+
+### ❌ NO uses async def cuando:
+
+- Usas ORMs síncronos (SQLAlchemy sin async, Django ORM)
+- Haces operaciones CPU-intensivas (cálculos pesados, procesamiento de imágenes)
+- Usas librerías bloqueantes (requests, pymongo, psycopg2)
+
+### Comparación práctica
+
+❌ Incorrecto (async con código síncrono)
+
+```python
+import requests
+
+@app.get("/users")
+async def get_users():
+    # ¡MAL! requests es bloqueante
+    response = requests.get("https://api.example.com/users")
+    return response.json()
+```
+
+✅ Correcto (async con httpx)
+
+```python
+import httpx
+
+@app.get("/users")
+async def get_users():
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://api.example.com/users")
+        return response.json()
+```
+
+✅ Correcto (sync si usas requests)
+
+```python
+import requests
+
+@app.get("/users")
+def get_users():  # Sin async
+    response = requests.get("https://api.example.com/users")
+    return response.json()
+```
+
+### Diagrama de decisión
+
+```
+┌─────────────────────────────────────────────────────┐
+│                                                     │
+│  ¿Tu función ESPERA algo externo?                  │
+│  (base de datos, API, archivo, red)                │
+│                                                     │
+│           SÍ ────────► usa async def                │
+│                                                     │
+│           NO ────────► usa def                      │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+
+        ┌─────────────────────┐
+        │   Tu endpoint       │
+        └──────────┬──────────┘
+                   │
+                   ▼
+        ┌──────────────────────┐
+        │ ¿Llamas a algo       │
+        │ que tarda tiempo?    │
+        └──────┬───────────────┘
+               │
+       ┌───────┴────────┐
+       │                │
+       ▼                ▼
+    ┌──────┐        ┌──────┐
+    │  SÍ  │        │  NO  │
+    └──┬───┘        └───┬──┘
+       │                │
+       ▼                ▼
+  ┌─────────────┐  ┌──────────┐
+  │ ¿La librería│  │  usa def │
+  │ es async?   │  │          │
+  └──┬──────────┘  └──────────┘
+     │
+  ┌──┴───┐
+  │      │
+  ▼      ▼
+┌────┐ ┌────┐
+│SÍ  │ │NO  │
+└─┬──┘ └─┬──┘
+  │      │
+  ▼      ▼
+async   def
+ def
+```
+
+---
+
+# Usando uv con FastAPI
+
+Para usar uv con esta aplicación, dentro del directorio del proyecto ejecuta:
+
+```bash
+uv init --app
+```
+
+```bash
+uv add fastapi --extra standard
+```
+
+Para ejecutar la aplicación FastAPI:
+
+```bash
+uv run fastapi dev
+```
+
+Docs: https://docs.astral.sh/uv/guides/integration/fastapi/#migrating-an-existing-fastapi-project
