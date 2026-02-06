@@ -327,3 +327,89 @@ uv run fastapi dev
 ```
 
 Docs: https://docs.astral.sh/uv/guides/integration/fastapi/#migrating-an-existing-fastapi-project
+
+
+
+# Celery Worker, Celery Beat y Diferencias: Celery vs Cache
+
+---
+
+## 1. **Celery Worker**
+- **Qué es**: Proceso que ejecuta tareas asíncronas en segundo plano.
+- **Cuándo usarlo**: Para procesos lentos o pesados (enviar emails, procesar archivos, llamadas a APIs externas).
+- **Ejemplo**:
+```python
+  from celery import Celery
+  
+  app = Celery('tasks', broker='redis://localhost:6379/0')
+  
+  @app.task
+  def send_email(user_id):
+      # lógica de envío
+      return "Email enviado"
+```
+- **Comando para iniciar**:
+```bash
+  celery -A tasks worker --loglevel=info
+```
+
+---
+
+## 2. **Celery Beat**
+- **Qué es**: Scheduler que ejecuta tareas programadas (como cron jobs).
+- **Cuándo usarlo**: Para tareas periódicas (reportes diarios, limpieza de base de datos, sincronización automática).
+- **Ejemplo**:
+```python
+  from celery.schedules import crontab
+  
+  app.conf.beat_schedule = {
+      'send-daily-report': {
+          'task': 'tasks.send_report',
+          'schedule': crontab(hour=9, minute=0),
+      },
+  }
+```
+- **Comando para iniciar**:
+```bash
+  celery -A tasks beat --loglevel=info
+```
+
+---
+
+## 3. **Diferencia: Celery vs Cache**
+
+| **Concepto**       | **Celery**                                      | **Cache (ej. Redis/Memcached)**              |
+|--------------------|-------------------------------------------------|---------------------------------------------|
+| **Propósito**      | Ejecutar tareas asíncronas y programadas        | Almacenar datos temporales para acceso rápido |
+| **Uso típico**     | Procesamiento en background                     | Reducir consultas a DB, mejorar velocidad    |
+| **Persistencia**   | No almacena resultados por defecto (configurable) | Datos volátiles (desaparecen al reiniciar)   |
+| **Ejemplo**        | Enviar 1000 emails en segundo plano             | Guardar el resultado de una consulta costosa |
+| **Tecnología**     | Sistema de colas (RabbitMQ, Redis como broker)  | Sistema clave-valor en memoria               |
+
+---
+
+## 4. **¿Pueden trabajar juntos?**
+✅ Sí.  
+- **Celery** ejecuta tareas.
+- **Cache** almacena resultados para evitar recalcular.
+
+**Ejemplo combinado**:
+```python
+from django.core.cache import cache
+
+@app.task
+def get_user_stats(user_id):
+    stats = cache.get(f'user_stats_{user_id}')
+    if not stats:
+        stats = calculate_stats(user_id)  # proceso pesado
+        cache.set(f'user_stats_{user_id}', stats, timeout=3600)
+    return stats
+```
+
+---
+
+## Resumen
+- **Celery Worker**: ejecuta tareas en background.
+- **Celery Beat**: programa tareas recurrentes.
+- **Cache**: almacena datos en memoria para acceso rápido.
+- **Diferencia clave**: Celery = procesamiento, Cache = almacenamiento temporal.
