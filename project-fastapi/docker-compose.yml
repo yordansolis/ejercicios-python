@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: postgres-sql-dev
+    environment:
+      POSTGRES_USER: estudiante
+      POSTGRES_PASSWORD: dev123
+      POSTGRES_DB: dev_sql
+    ports:
+      - "5433:5432"
+    volumes:
+      - dev_data:/var/lib/postgresql/data
+
+volumes:
+  dev_data:

@@ -1,5 +1,7 @@
 # Ejercicios-python
 
+
+
 Ejercicios y lógica de programación
 
 # 1. Retos de funciones y métodos
@@ -320,7 +322,7 @@ uv init --app
 uv add fastapi --extra standard
 ```
 
-Para ejecutar la aplicación FastAPI:
+Para ejecutar la aplicación FastAPI 🚀:
 
 ```bash
 uv run fastapi dev
@@ -413,3 +415,30 @@ def get_user_stats(user_id):
 - **Celery Beat**: programa tareas recurrentes.
 - **Cache**: almacena datos en memoria para acceso rápido.
 - **Diferencia clave**: Celery = procesamiento, Cache = almacenamiento temporal.
+
+
+
+template:
+https://github.com/vargasjona/fastapi-alembic-sqlmodel-async/tree/main?tab=readme-ov-file
+
+
+
+# Alembic
+
+uv add alembic
+
+
+
+
+
+ docker-compose down -v && docker-compose up -d        
+
+Dato	Valor
+Contenedor	postgres-sql-dev
+Puerto	localhost:5433
+Usuario	estudiante
+Contraseña	dev123
+Base de datos	dev_sql
+
+
+ uv add sqlalchemy
